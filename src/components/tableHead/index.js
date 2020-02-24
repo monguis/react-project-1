@@ -1,13 +1,15 @@
-import React from "react";
+import React ,{useEffect} from "react";
 
 const TableHead = (props) => {
+    console.log(Object.keys(props.source))
+
+
     return (
         <thead>
             <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
+                {
+                Object.keys(props.source).map(element => (<th>{element}</th>))
+                }
             </tr>
         </thead>)
 }
