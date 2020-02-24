@@ -28,7 +28,7 @@ const TableAssembler = (props) => {
     return (
         <Table striped bordered hover size="lg">
             <TableHead source={content.head} />
-            <TableBody source={content.body} />
+            <TableBody body={content.body} />
         </Table>);
 }
 
