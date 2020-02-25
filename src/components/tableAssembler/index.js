@@ -27,11 +27,23 @@ const TableAssembler = (props) => {
 
     const handleHead = (e) => {
         let auxArr = content.body.sort((a, b) => a[e.target.innerText] < b[e.target.innerText]);
-
+console.log(e.target.getAttribute("sorted"))
         if (+content.head[e.target.innerText]) {
-            auxArr = content.body.sort((a, b) => a[e.target.innerText] - b[e.target.innerText]);
+            if (e.target.getAttribute("sorted")==="desc") {
+                auxArr = content.body.sort((a, b) => a[e.target.innerText] - b[e.target.innerText]);
+                e.target.setAttribute("sorted","asc")
+            } else{
+                auxArr = content.body.sort((a, b) => b[e.target.innerText] - a[e.target.innerText]);
+                e.target.setAttribute("sorted","desc")
+            }
         } else {
+            if (e.target.getAttribute("sorted")==="desc") {
             auxArr = content.body.sort((a, b) => a[e.target.innerText] < b[e.target.innerText]);
+            e.target.setAttribute("sorted","asc")
+            } else {
+                auxArr = content.body.sort((a, b) => b[e.target.innerText] < a[e.target.innerText]);  
+                e.target.setAttribute("sorted","desc") 
+            }
         }
 
         setContent({
