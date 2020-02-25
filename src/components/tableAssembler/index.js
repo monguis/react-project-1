@@ -4,6 +4,7 @@ import TableBody from "../tableBody/";
 import { Table } from 'react-bootstrap';
 import API from "../../utils/API";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import FilterInput from "../filterInput/"
 
 
 const TableAssembler = (props) => {
@@ -15,6 +16,7 @@ const TableAssembler = (props) => {
     useEffect(() => {
         API.search(props.source)
             .then(res => {
+
                 setContent({
                     head: res.data.data[0],
                     body: res.data.data
@@ -26,23 +28,22 @@ const TableAssembler = (props) => {
     }, [])
 
     const handleHead = (e) => {
-        let auxArr = content.body.sort((a, b) => a[e.target.innerText] < b[e.target.innerText]);
-console.log(e.target.getAttribute("sorted"))
+        let auxArr;
         if (+content.head[e.target.innerText]) {
-            if (e.target.getAttribute("sorted")==="desc") {
+            if (e.target.getAttribute("sorted") === "desc") {
                 auxArr = content.body.sort((a, b) => a[e.target.innerText] - b[e.target.innerText]);
-                e.target.setAttribute("sorted","asc")
-            } else{
+                e.target.setAttribute("sorted", "asc")
+            } else {
                 auxArr = content.body.sort((a, b) => b[e.target.innerText] - a[e.target.innerText]);
-                e.target.setAttribute("sorted","desc")
+                e.target.setAttribute("sorted", "desc")
             }
         } else {
-            if (e.target.getAttribute("sorted")==="desc") {
-            auxArr = content.body.sort((a, b) => a[e.target.innerText] < b[e.target.innerText]);
-            e.target.setAttribute("sorted","asc")
+            if (e.target.getAttribute("sorted") === "desc") {
+                auxArr = content.body.sort((a, b) => a[e.target.innerText] < b[e.target.innerText]);
+                e.target.setAttribute("sorted", "asc")
             } else {
-                auxArr = content.body.sort((a, b) => b[e.target.innerText] < a[e.target.innerText]);  
-                e.target.setAttribute("sorted","desc") 
+                auxArr = content.body.sort((a, b) => b[e.target.innerText] < a[e.target.innerText]);
+                e.target.setAttribute("sorted", "desc")
             }
         }
 
@@ -52,11 +53,19 @@ console.log(e.target.getAttribute("sorted"))
         })
     }
 
+    const handleInput = () =>{
+console.log("yessir")
+    }
+
     return (
+<>
+        <FilterInput handleInput = {handleInput} values = {Object.keys(content.head)}/>
+
         <Table striped bordered hover size="lg">
-            <TableHead source={content.head} handleHead={handleHead} />
+            <TableHead source={content.head} handleHead={handleHead}  />
             <TableBody body={content.body} />
-        </Table>);
+        </Table>
+        </>);
 }
 
 export default TableAssembler;
