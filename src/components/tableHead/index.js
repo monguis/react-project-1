@@ -5,7 +5,7 @@ const TableHead = (props) => {
         <thead>
             <tr onClick={(e) => { props.handleHead(e) }}>
                 {
-                    Object.keys(props.source).map(element => (<th sorted="desc">{element}</th>))
+                    Object.keys(props.source).map((element,ind) => (<th key={ind} sorted="desc">{element}</th>))
                 }
             </tr>
         </thead>)

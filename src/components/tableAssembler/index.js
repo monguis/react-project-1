@@ -13,36 +13,60 @@ const TableAssembler = (props) => {
         body: []
     })
 
+    const [filter, setFilter] = useState({
+        head: [],
+        key: "",
+        value: ""
+    })
+
     useEffect(() => {
         API.search(props.source)
             .then(res => {
 
                 setContent({
                     head: res.data.data[0],
-                    body: res.data.data
+                    body: res.data.data,
+                    backup:res.data.data
                 })
+                const auxArr = Object.keys(res.data.data[0]);
+                setFilter({
+                    head: auxArr,
+                    key:  auxArr[0],
+                    value: ""
+                })
+                
             })
             .catch(err => {
                 console.err(err);
             })
     }, [])
 
+    // useEffect(() => {
+    //     const auxArr = Object.keys(content.head);
+    //     setFilter({
+    //         head: auxArr,
+    //         key: auxArr[0],
+    //         value: ""
+    //     })
+    // }, [content])
+
     const handleHead = (e) => {
+        const toCheck = e.target.innerText
         let auxArr;
-        if (+content.head[e.target.innerText]) {
+        if (+content.head[toCheck]) {
             if (e.target.getAttribute("sorted") === "desc") {
-                auxArr = content.body.sort((a, b) => a[e.target.innerText] - b[e.target.innerText]);
+                auxArr = content.body.sort((a, b) => a[toCheck] - b[toCheck]);
                 e.target.setAttribute("sorted", "asc")
             } else {
-                auxArr = content.body.sort((a, b) => b[e.target.innerText] - a[e.target.innerText]);
+                auxArr = content.body.sort((a, b) => b[toCheck] - a[toCheck]);
                 e.target.setAttribute("sorted", "desc")
             }
         } else {
             if (e.target.getAttribute("sorted") === "desc") {
-                auxArr = content.body.sort((a, b) => a[e.target.innerText] < b[e.target.innerText]);
+                auxArr = content.body.sort((a, b) => a[toCheck] < b[toCheck]);
                 e.target.setAttribute("sorted", "asc")
             } else {
-                auxArr = content.body.sort((a, b) => b[e.target.innerText] < a[e.target.innerText]);
+                auxArr = content.body.sort((a, b) => b[toCheck] < a[toCheck]);
                 e.target.setAttribute("sorted", "desc")
             }
         }
@@ -53,18 +77,29 @@ const TableAssembler = (props) => {
         })
     }
 
-    const handleInput = () =>{
-console.log("yessir")
+    const handleFilter = (object) => {
+        setFilter({
+            ...filter,
+            ...object
+        })
+    }
+    const filterTable = (object) => {
+        handleFilter(object);
+        const auxArr = content.backup.filter((item) => item[filter.key].includes(filter.value))
+        setContent({
+            ...content,
+            body: auxArr
+        })
     }
 
     return (
-<>
-        <FilterInput handleInput = {handleInput} values = {Object.keys(content.head)}/>
+        <>
+            <FilterInput handleFilter={handleFilter} filterTable={filterTable} values={filter} />
 
-        <Table striped bordered hover size="lg">
-            <TableHead source={content.head} handleHead={handleHead}  />
-            <TableBody body={content.body} />
-        </Table>
+            <Table striped bordered hover size="lg">
+                <TableHead source={content.head} handleHead={handleHead} />
+                <TableBody body={content.body} />
+            </Table>
         </>);
 }
 
