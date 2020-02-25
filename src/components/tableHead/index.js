@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 const TableHead = (props) => {
     return (
         <thead>
-            <tr>
+            <tr onClick={(e) => { props.handleHead(e) }}>
                 {
                     Object.keys(props.source).map(element => (<th>{element}</th>))
                 }

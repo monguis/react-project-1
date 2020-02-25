@@ -2,7 +2,6 @@ import React from "react"
 
 
 const TableBody = (props) => {
-    console.log(props.body);
     return (
         <tbody>
             {props.body.map(item => {

@@ -14,20 +14,35 @@ const TableAssembler = (props) => {
 
     useEffect(() => {
         API.search(props.source)
-        .then(res=>{
-            setContent({
-                head:res.data.data[0],
-                body:res.data.data
+            .then(res => {
+                setContent({
+                    head: res.data.data[0],
+                    body: res.data.data
+                })
             })
-        })
-        .catch(err=>{
-            console.err(err);
-        })
+            .catch(err => {
+                console.err(err);
+            })
     }, [])
+
+    const handleHead = (e) => {
+        let auxArr = content.body.sort((a, b) => a[e.target.innerText] < b[e.target.innerText]);
+
+        if (+content.head[e.target.innerText]) {
+            auxArr = content.body.sort((a, b) => a[e.target.innerText] - b[e.target.innerText]);
+        } else {
+            auxArr = content.body.sort((a, b) => a[e.target.innerText] < b[e.target.innerText]);
+        }
+
+        setContent({
+            ...content,
+            body: auxArr
+        })
+    }
 
     return (
         <Table striped bordered hover size="lg">
-            <TableHead source={content.head} />
+            <TableHead source={content.head} handleHead={handleHead} />
             <TableBody body={content.body} />
         </Table>);
 }
